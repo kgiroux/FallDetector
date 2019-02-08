@@ -1,10 +1,10 @@
 package com.aimove.iot.falldetector.utils;
 
 /**
- * Accelerometer Coordinate, that will store accelerometer data
+ * Gyrometer Coordinate, that will store accelerometer data
  * @author Kevin Giroux
  */
-public class AccelerometerCoordinate {
+public class GyrometerCoordinate {
     /**
      * X coordinate
      */
