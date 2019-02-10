@@ -1,4 +1,4 @@
-package com.aimove.iot.falldetector;
+package com.aimove.iot.falldetector.activity;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

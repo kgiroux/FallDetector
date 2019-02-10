@@ -1,4 +1,4 @@
-package com.aimove.iot.falldetector;
+package com.aimove.iot.falldetector.activity;
 
 import android.content.Intent;
 import android.hardware.Sensor;
@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.aimove.iot.falldetector.R;
 import com.aimove.iot.falldetector.detector.FallDetector;
 import com.aimove.iot.falldetector.utils.AccelerometerCoordinate;
 import com.aimove.iot.falldetector.utils.GyrometerCoordinate;
@@ -24,9 +25,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener, View.OnClickListener {
 
