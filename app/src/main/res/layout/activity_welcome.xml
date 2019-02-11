@@ -10,13 +10,14 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:contentDescription="@string/app_name"
             android:id="@+id/imageView"
-            android:layout_weight="0.80"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginLeft="35dp"
-            android:layout_marginRight="35dp" />
+            android:layout_marginRight="35dp"
+            android:layout_weight="0.80"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/fall_detector" />
 
         <TextView
             android:id="@+id/versionNumber"
