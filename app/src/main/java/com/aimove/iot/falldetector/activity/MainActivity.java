@@ -306,18 +306,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             SharedPreferences sharedPreferences =
                     PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
             String contactNumber = sharedPreferences.getString("contactNumber", "");
-            String customizeMessage = sharedPreferences.getString("customizeMessage","I fall in the street, please call me in a way to check if I'm ok.");
-            PendingIntent sentPI = PendingIntent.getBroadcast(MainActivity.this, 0, new Intent(SENT_SMS_ACTION_NAME), 0);
-            PendingIntent deliveredPI = PendingIntent.getBroadcast(MainActivity.this, 0, new Intent(DELIVERED_SMS_ACTION_NAME), 0);
+            if (!contactNumber.equals("")){
+                String customizeMessage = sharedPreferences.getString("customizeMessage","I fall in the street, please call me in a way to check if I'm ok.");
+                PendingIntent sentPI = PendingIntent.getBroadcast(MainActivity.this, 0, new Intent(SENT_SMS_ACTION_NAME), 0);
+                PendingIntent deliveredPI = PendingIntent.getBroadcast(MainActivity.this, 0, new Intent(DELIVERED_SMS_ACTION_NAME), 0);
 
-            ArrayList<String> parts = smsManager.divideMessage(customizeMessage + " "+ lastAddress);
-            ArrayList<PendingIntent> sendList = new ArrayList<>();
-            sendList.add(sentPI);
+                ArrayList<String> parts = smsManager.divideMessage(customizeMessage + " "+ lastAddress);
+                ArrayList<PendingIntent> sendList = new ArrayList<>();
+                sendList.add(sentPI);
 
-            ArrayList<PendingIntent> deliverList = new ArrayList<>();
-            deliverList.add(deliveredPI);
-            smsManager.sendMultipartTextMessage(contactNumber, null, parts, sendList, deliverList);
-            Toast.makeText(this, "OK", Toast.LENGTH_LONG).show();
+                ArrayList<PendingIntent> deliverList = new ArrayList<>();
+                deliverList.add(deliveredPI);
+                smsManager.sendMultipartTextMessage(contactNumber, null, parts, sendList, deliverList);
+                Toast.makeText(this, "OK", Toast.LENGTH_LONG).show();
+            }
+
 
 
         } catch (Exception e) {
