@@ -15,72 +15,8 @@
     <string name="enable_gps_help">Enable this option will help the Emergency number to locate you, in a way to provide you assistance</string>
     <string name="customize_message">Customize Message</string>
     <string name="customize_message_help">Customize your Message in a way to help you receiver to identify yourself</string>
-    <string name="title_activity_settings_test">SettingsTest</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
-    <string name="pref_title_sync_frequency">Sync frequency</string>
-    <string-array name="pref_sync_frequency_titles">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_sync_frequency_values">
-        <item>15</item>
-        <item>30</item>
-        <item>60</item>
-        <item>180</item>
-        <item>360</item>
-        <item>-1</item>
-    </string-array>
-
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
-    <string name="pref_title_system_sync_settings">System sync settings</string>
-
-    <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-    <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
-    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="purpose_n_this_application_made_in_order_to_detect_if_someone_falls_into_the_ground">Purpose:   \n This application made in order to detect if someone falls into the ground</string>
+    <string name="tutorial_n_click_on_the_setttings_button_in_order_to_put_the_phone_number_that_you_want_to_be_informed_in_case_you_fall_you_can_activate_gps_location_also_from_there_n_click_the_send_text_button_to_send_an_sms_to_the_number_that_you_saved_n_click_on_stop_sound_to_stop_the_alarm_sound_n_click_on_record_data_in_order_to_save_accelerometer_and_gyro_values_to_txt_files">Tutorial: \n  Click on the setttings button in order to put the phone number that you want to be informed in case you fall, you can activate gps location also from there   click the send_text button to send an sms to the number that you saved   click on stop sound to stop the alarm sound   click on record data in order to save accelerometer and gyro values to txt files</string>
+    <string name="about_permissions_n_this_application_need_permissions_for_using_accelometer_and_gyro_values_these_values_are_processed_within_the_smartphone_locally_additionally_is_using_gps_coordinates_in_order_to_inform_the_person_throught_sms_this_application_is_not_connected_with_the_internet">About permissions:  \n This application need permissions for using accelometer and gyro values. These values are processed within the smartphone locally. Additionally, is using GPS coordinates in order to inform the person throught SMS. This application is not connected with the internet</string>
+    <string name="record_data">Record data</string>
 </resources>
