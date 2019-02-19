@@ -12,4 +12,18 @@
         android:singleLine="true"
         android:title="@string/contact_number_title" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="enableGps"
+        android:summary="@string/enable_gps_help"
+        android:title="@string/enable_gps" />
+
+    <EditTextPreference
+        android:defaultValue="I fall in the street, please call me in a way to check if I'm ok."
+        android:key="customizeMessage"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:summary="customize_message_help"
+        android:title="@string/customize_message" />
+
 </PreferenceScreen>

@@ -1,22 +1,35 @@
 package com.aimove.iot.falldetector.activity;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.provider.Telephony;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.aimove.iot.falldetector.R;
 
 import java.util.List;
+
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.SEND_SMS;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -31,6 +44,7 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
+    public  static final int PERMISSIONS_MULTIPLE_REQUEST = 42;
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -95,7 +109,41 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setupActionBar();
+        checkPermission();
     }
+
+
+    private void checkPermission(){
+        if (Build.VERSION.SDK_INT >= 23) {
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(SettingsActivity.this, SEND_SMS);
+            int checkFinePermission = ContextCompat.checkSelfPermission(SettingsActivity.this, ACCESS_FINE_LOCATION);
+            int checkCoarsePermission = ContextCompat.checkSelfPermission(SettingsActivity.this, ACCESS_COARSE_LOCATION);
+            if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED &&
+                    checkFinePermission != PackageManager.PERMISSION_GRANTED &&
+                    checkCoarsePermission != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(SettingsActivity.this,new String[]{SEND_SMS,ACCESS_FINE_LOCATION,ACCESS_COARSE_LOCATION}, PERMISSIONS_MULTIPLE_REQUEST);
+            }
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case PERMISSIONS_MULTIPLE_REQUEST:
+                if (grantResults.length > 0) {
+                    boolean checkCallPhonePermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    boolean checkFinePermission = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean checkCoarsePermission = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                    if (checkCallPhonePermission && checkFinePermission && checkCoarsePermission) {
+                        Log.e("Perm", "Permission Granted");
+                    }
+                }
+        }
+    }
+
 
     /**
      * Set up the {@link android.app.ActionBar}, if the API is available.
@@ -150,6 +198,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // updated to reflect the new value, per the Android Design
             // guidelines.
             bindPreferenceSummaryToValue(findPreference("contactNumber"));
+            bindPreferenceSummaryToValue(findPreference("customizeMessage"));
+
+
         }
 
         @Override
