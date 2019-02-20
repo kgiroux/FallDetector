@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         fallDetector = new FallDetector();
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        buttonStop = findViewById(R.id.stopbutton);
+        //buttonStop = findViewById(R.id.stopbutton);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_FASTEST);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_FASTEST);
 
