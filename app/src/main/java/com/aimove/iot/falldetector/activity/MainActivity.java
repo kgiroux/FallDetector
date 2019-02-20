@@ -114,12 +114,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //buttonStop = findViewById(R.id.stopbutton);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_FASTEST);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_FASTEST);
-
+        buttonStop = findViewById(R.id.stop);
         buttonStop.setOnClickListener(this);
         buttonRecord = findViewById(R.id.recordbutton);
         buttonRecord.setOnClickListener(this);
-        sendTextButton = findViewById(R.id.sendText);
-        sendTextButton.setOnClickListener(this);
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         boolean enableGPS = sharedPreferences.getBoolean("enableGps", false);
@@ -261,8 +259,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 e.printStackTrace();
             }
 
-        }else if (v.getId() == R.id.sendText){
-            sendSms();
+        }else if (v.getId() == R.id.stop){
+            if(mp != null){
+                mp.stop();
+                mp.release();
+            }
+            mp = null;
         }
 
 
