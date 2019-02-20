@@ -128,7 +128,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:weightSum="33"
+        android:weightSum="@"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scrollView2">
@@ -136,7 +136,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="11">
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/recordbutton"
@@ -157,35 +157,11 @@
                 tools:layout_editor_absoluteY="587dp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="11">
-
-            <Button
-                android:id="@+id/stopbutton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:bottomRightRadius="10dp"
-                android:bottomLeftRadius="10dp"
-                android:topLeftRadius="10dp"
-                android:topRightRadius="10dp"
-                android:background="@color/design_default_color_primary"
-                android:text="@string/stop_button"
-                android:textColor="@android:color/holo_red_light"
-                app:layout_constraintEnd_toStartOf="@+id/sendText"
-                app:layout_constraintStart_toEndOf="@+id/recordbutton"
-                tools:layout_editor_absoluteY="587dp" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="11">
+            android:layout_weight="1">
 
             <Button
                 android:id="@+id/sendText"

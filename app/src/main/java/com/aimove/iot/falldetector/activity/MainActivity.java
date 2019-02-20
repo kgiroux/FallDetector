@@ -9,6 +9,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.icu.text.DecimalFormat;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -18,6 +19,7 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public static final String SENT_SMS_ACTION_NAME = "SMS_SENT";
     public static final String DELIVERED_SMS_ACTION_NAME = "SMS_DELIVERED";
+    private static final long SOUND_LENGTH = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +122,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         sendTextButton.setOnClickListener(this);
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        final String contactNumber = sharedPreferences.getString("contactNumber", "");
-        final String customizeMessage = sharedPreferences.getString("customizeMessage","I fall in the street, please call me in a way to check if I'm ok.");
         boolean enableGPS = sharedPreferences.getBoolean("enableGps", false);
         if(enableGPS){
             checkPermission();
@@ -186,44 +187,39 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             accelerometerCoordinate.setY(event.values[1]);
             accelerometerCoordinate.setZ(event.values[2]);
             fallDetector.addDataToList(accelerometerCoordinate);
-            int result = fallDetector.runAnalysis();
-            Log.d("Result", String.valueOf(result));
-            if (result == -1){
+            int result = fallDetector.runAnalysis(accelerometerCoordinate);
+            if (result == -1)
+            {
                 if (mp == null){
                     mp = MediaPlayer.create(this, R.raw.falling);
+                    Log.e("Sound", "playing");
                 }
                 if (!mp.isPlaying()){
                     mp.start();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mp.stop();
+                            mp.release();
+                            mp = null;
+                            sendSms();
+                        }
+                    }, SOUND_LENGTH);
                 }
-
             }
-        } else {
+        }else {
             GyrometerCoordinate gyrometerCoordinate = new GyrometerCoordinate();
             gyrometerCoordinate.setX(event.values[0]);
             gyrometerCoordinate.setY(event.values[1]);
             gyrometerCoordinate.setZ(event.values[2]);
             fallDetector.addDataToListGyroMeterList(gyrometerCoordinate);
-            int result = fallDetector.runAnalysis();
-            Log.d("Result", String.valueOf(result));
-            if (result == -1){
-                if (mp == null){
-                    mp = MediaPlayer.create(this, R.raw.falling);
-                }
-                if (!mp.isPlaying()){
-                    mp.start();
-                }
-
-            }
         }
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.stopbutton){
-            mp.stop();
-            mp.release();
-            mp = null;
-        }else if (v.getId() == R.id.recordbutton){
+        if (v.getId() == R.id.recordbutton){
             Date date = new Date();
             String filename = "record_data_"+date.getTime()+"_acc.txt";
             String filenameGyro = "record_data_"+date.getTime()+"_gyro.txt";

@@ -38,8 +38,20 @@ public class FallDetector {
     public void removeElementToList(final int indexToRemove){
         this.accelerometerCoordinates.remove(indexToRemove);
     }
-    public int runAnalysis(){
-        return -1;
+    public int runAnalysis(final AccelerometerCoordinate pAccelerometerCoordinate){
+        AccelerometerCoordinate accelerometerCoordinate = new AccelerometerCoordinate();
+
+        double a= Math.sqrt(
+                        Math.pow(pAccelerometerCoordinate.getX(),2) +
+                        Math.pow(pAccelerometerCoordinate.getY(),2) +
+                        Math.pow(pAccelerometerCoordinate.getZ(),2)
+        );
+        if (a>0.3 && a <0.5)
+        {
+           return -1;
+        }else {
+           return 0;
+        }
     }
 
     public List<AccelerometerCoordinate> retrieveListOfCoordinates(){
