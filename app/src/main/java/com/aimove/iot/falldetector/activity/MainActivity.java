@@ -10,12 +10,14 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.icu.text.DecimalFormat;
+import android.icu.text.SimpleDateFormat;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -41,15 +43,21 @@ import com.aimove.iot.falldetector.utils.GyrometerCoordinate;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CALL_PHONE;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.SEND_SMS;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -111,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         fallDetector = new FallDetector();
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        //buttonStop = findViewById(R.id.stopbutton);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_FASTEST);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_FASTEST);
         buttonStop = findViewById(R.id.stop);
@@ -167,6 +174,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
 
+        }else if(id == R.id.history) {
+            Intent intent  = new Intent(this, HistoryActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -201,7 +211,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                             mp.stop();
                             mp.release();
                             mp = null;
+                            writeTextToFallingRecord();
                             sendSms();
+                            makePhoneCall();
                         }
                     }, SOUND_LENGTH);
                 }
@@ -215,6 +227,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    /**
+     * Write history of fall in a file
+     */
+    private void writeTextToFallingRecord(){
+        Date date = new Date();
+        String filename = "historyOfFall.txt";
+        File directory = new File(this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "record_data");
+        String path = Objects.requireNonNull(this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)).getPath() + "/record_data/";
+        File fileHistory = new File(path+filename);
+        if (!directory.mkdirs()) {
+            Log.e("Help", "Directory not created");
+        }
+        try{
+            FileOutputStream fileInput = new FileOutputStream(fileHistory, true);
+            PrintStream printstream = new PrintStream(fileInput);
+            printstream.print("Fall the "+ DateFormat.getDateTimeInstance().format(date) +"\n");
+            fileInput.close();
+        } catch (IOException e) {
+            Log.e("Write", "Error during the writing of the file", e);
+        }
+    }
+
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.recordbutton){
@@ -222,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             String filename = "record_data_"+date.getTime()+"_acc.txt";
             String filenameGyro = "record_data_"+date.getTime()+"_gyro.txt";
             File directory = new File(this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "record_data");
-            String path = this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getPath() + "/record_data/";
+            String path = Objects.requireNonNull(this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)).getPath() + "/record_data/";
 
             File fileAcc = new File(path+filename);
             File fileGyro = new File(path+filenameGyro);
@@ -269,11 +303,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
     }
+
+    /**
+     * Method that will check permission
+     */
     private void checkPermission(){
         if (Build.VERSION.SDK_INT >= 23) {
             int checkCallPhonePermission = ContextCompat.checkSelfPermission(MainActivity.this, SEND_SMS);
             if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{SEND_SMS, ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, PERMISSIONS_MULTIPLE_REQUEST);
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{SEND_SMS, ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE, CALL_PHONE}, PERMISSIONS_MULTIPLE_REQUEST);
 
             }
         }
@@ -291,7 +329,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     boolean checkCoarsePermission = grantResults[2] == PackageManager.PERMISSION_GRANTED;
                     boolean checkWritePermission = grantResults[3] == PackageManager.PERMISSION_GRANTED;
                     boolean checkReadPermission = grantResults[4] == PackageManager.PERMISSION_GRANTED;
-                    if (checkCallPhonePermission && checkFinePermission && checkCoarsePermission && checkWritePermission && checkReadPermission) {
+                    boolean checkCallPermission = grantResults[5] == PackageManager.PERMISSION_GRANTED;
+                    if (checkCallPhonePermission && checkFinePermission && checkCoarsePermission && checkWritePermission && checkReadPermission && checkCallPermission) {
                         Log.e("Perm", "Permission Granted");
                     }
                 }
@@ -304,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             SharedPreferences sharedPreferences =
                     PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
             String contactNumber = sharedPreferences.getString("contactNumber", "");
-            if (!contactNumber.equals("")){
+            if (null != contactNumber && !contactNumber.isEmpty()){
                 String customizeMessage = sharedPreferences.getString("customizeMessage","I fall in the street, please call me in a way to check if I'm ok.");
                 PendingIntent sentPI = PendingIntent.getBroadcast(MainActivity.this, 0, new Intent(SENT_SMS_ACTION_NAME), 0);
                 PendingIntent deliveredPI = PendingIntent.getBroadcast(MainActivity.this, 0, new Intent(DELIVERED_SMS_ACTION_NAME), 0);
@@ -324,6 +363,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         } catch (Exception e) {
             Toast.makeText(this, "Error"+e, Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void makePhoneCall(){
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+        String contactNumber = sharedPreferences.getString("contactNumber", "");
+        if(null != contactNumber && !contactNumber.isEmpty()){
+            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+contactNumber));
+            startActivity(intent);
+        }
+
+
     }
 
     private Address makeUseOfNewLocation(Location location){

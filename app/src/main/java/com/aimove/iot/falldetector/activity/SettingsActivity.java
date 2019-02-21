@@ -29,7 +29,10 @@ import java.util.List;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.CALL_PHONE;
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.SEND_SMS;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -115,13 +118,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private void checkPermission(){
         if (Build.VERSION.SDK_INT >= 23) {
-            int checkCallPhonePermission = ContextCompat.checkSelfPermission(SettingsActivity.this, SEND_SMS);
+            int checkCallPhonePermission = ContextCompat.checkSelfPermission(SettingsActivity.this, CALL_PHONE);
+            int checkSmsPermission = ContextCompat.checkSelfPermission(SettingsActivity.this, SEND_SMS);
             int checkFinePermission = ContextCompat.checkSelfPermission(SettingsActivity.this, ACCESS_FINE_LOCATION);
             int checkCoarsePermission = ContextCompat.checkSelfPermission(SettingsActivity.this, ACCESS_COARSE_LOCATION);
             if(checkCallPhonePermission != PackageManager.PERMISSION_GRANTED &&
                     checkFinePermission != PackageManager.PERMISSION_GRANTED &&
-                    checkCoarsePermission != PackageManager.PERMISSION_GRANTED){
-                ActivityCompat.requestPermissions(SettingsActivity.this,new String[]{SEND_SMS,ACCESS_FINE_LOCATION,ACCESS_COARSE_LOCATION}, PERMISSIONS_MULTIPLE_REQUEST);
+                    checkCoarsePermission != PackageManager.PERMISSION_GRANTED &&
+            checkSmsPermission != PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(SettingsActivity.this,new String[]{SEND_SMS,ACCESS_FINE_LOCATION,ACCESS_COARSE_LOCATION, CALL_PHONE, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE,}, PERMISSIONS_MULTIPLE_REQUEST);
             }
         }
     }
