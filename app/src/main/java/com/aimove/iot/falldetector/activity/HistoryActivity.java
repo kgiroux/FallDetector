@@ -3,6 +3,7 @@ package com.aimove.iot.falldetector.activity;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -47,6 +48,9 @@ public class HistoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setHasFixedSize(false);
         recyclerView.setNestedScrollingEnabled(false);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                mLayoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         recyclerView.setAdapter(historyItemAdapter);
 
