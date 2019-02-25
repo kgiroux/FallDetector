@@ -9,8 +9,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.icu.text.DecimalFormat;
-import android.icu.text.SimpleDateFormat;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -43,7 +41,6 @@ import com.aimove.iot.falldetector.utils.GyrometerCoordinate;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -86,11 +83,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     /**
      * button for the recording
      */
-    private Button buttonRecord;
-    /**
-     * Send Button
-     */
-    private Button sendTextButton;
+    private Button buttonSendText;
+
     /**
      * Check Status Permission
      */
@@ -116,15 +110,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        this.setTitle("Fall Detector");
         fallDetector = new FallDetector();
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_FASTEST);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_FASTEST);
         buttonStop = findViewById(R.id.stop);
         buttonStop.setOnClickListener(this);
-        buttonRecord = findViewById(R.id.recordbutton);
-        buttonRecord.setOnClickListener(this);
+        buttonSendText = findViewById(R.id.send_text);
+        buttonSendText.setOnClickListener(this);
+
+        launchServiceLocation();
+    }
+
+    public void launchServiceLocation(){
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         boolean enableGPS = sharedPreferences.getBoolean("enableGps", false);
@@ -151,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 public void onProviderDisabled(String provider) {}
             };
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
         }
     }
 
@@ -168,14 +166,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
-
-        }else if(id == R.id.history) {
+        }else if(id == R.id.action_history) {
             Intent intent  = new Intent(this, HistoryActivity.class);
+            startActivity(intent);
+        }else if(id == R.id.action_record) {
+            this.saveDataAfterRecord();
+        }else if(id == R.id.action_about) {
+            Intent intent  = new Intent(this, AboutActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
@@ -249,59 +250,63 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
+    /**
+     * Function that is called when save the data for analysis purpose
+     */
+    private void saveDataAfterRecord(){
+        Date date = new Date();
+        String filename = "record_data_"+date.getTime()+"_acc.txt";
+        String filenameGyro = "record_data_"+date.getTime()+"_gyro.txt";
+        File directory = new File(this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "record_data");
+        String path = Objects.requireNonNull(this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)).getPath() + "/record_data/";
+
+        File fileAcc = new File(path+filename);
+        File fileGyro = new File(path+filenameGyro);
+        if (!directory.mkdirs()) {
+            Log.e("Help", "Directory not created");
+        }
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(fileAcc));
+            for (AccelerometerCoordinate accelerometerCoordinate : fallDetector.retrieveListOfCoordinates()){
+                writer.write(""
+                        +accelerometerCoordinate.getX()
+                        +" "
+                        +accelerometerCoordinate.getY()
+                        +" "
+                        +accelerometerCoordinate.getZ());
+                writer.newLine();
+            }
+            writer.flush();
+            writer.close();
+
+            writer = new BufferedWriter(new FileWriter(fileGyro));
+            for (GyrometerCoordinate gyrometerCoordinate : fallDetector.retrieveListOfGyrometerCoordinates()){
+                writer.write(""
+                        +gyrometerCoordinate.getX()
+                        +" "
+                        +gyrometerCoordinate.getY()
+                        +" "
+                        +gyrometerCoordinate.getZ());
+                writer.newLine();
+            }
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.recordbutton){
-            Date date = new Date();
-            String filename = "record_data_"+date.getTime()+"_acc.txt";
-            String filenameGyro = "record_data_"+date.getTime()+"_gyro.txt";
-            File directory = new File(this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), "record_data");
-            String path = Objects.requireNonNull(this.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)).getPath() + "/record_data/";
-
-            File fileAcc = new File(path+filename);
-            File fileGyro = new File(path+filenameGyro);
-            if (!directory.mkdirs()) {
-                Log.e("Help", "Directory not created");
-            }
-            try {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(fileAcc));
-                for (AccelerometerCoordinate accelerometerCoordinate : fallDetector.retrieveListOfCoordinates()){
-                    writer.write(""
-                            +accelerometerCoordinate.getX()
-                            +" "
-                            +accelerometerCoordinate.getY()
-                            +" "
-                            +accelerometerCoordinate.getZ());
-                    writer.newLine();
-                }
-                writer.flush();
-                writer.close();
-
-                writer = new BufferedWriter(new FileWriter(fileGyro));
-                for (GyrometerCoordinate gyrometerCoordinate : fallDetector.retrieveListOfGyrometerCoordinates()){
-                    writer.write(""
-                            +gyrometerCoordinate.getX()
-                            +" "
-                            +gyrometerCoordinate.getY()
-                            +" "
-                            +gyrometerCoordinate.getZ());
-                    writer.newLine();
-                }
-                writer.flush();
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }else if (v.getId() == R.id.stop){
+        if (v.getId() == R.id.stop){
             if(mp != null){
                 mp.stop();
                 mp.release();
             }
             mp = null;
+        } else if (v.getId() == R.id.send_text) {
+            sendSms();
         }
-
-
     }
 
     /**
@@ -390,5 +395,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        buttonStop.setOnClickListener(null);
+        buttonSendText.setOnClickListener(null);
+        sensorManager.unregisterListener(this);
+        sensorManager = null;
     }
 }

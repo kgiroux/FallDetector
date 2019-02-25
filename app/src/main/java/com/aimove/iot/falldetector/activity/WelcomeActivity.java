@@ -12,7 +12,6 @@ import com.aimove.iot.falldetector.R;
 
 public class WelcomeActivity extends AppCompatActivity {
     private Handler handler = new Handler();
-    public String email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         long SPLASH_LENGTH = 3000;

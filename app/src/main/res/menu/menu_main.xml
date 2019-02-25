@@ -5,12 +5,29 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
+        android:icon="@drawable/settings"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom|withText"/>
 
     <item
-        android:id="@+id/history"
+        android:id="@+id/action_about"
         android:orderInCategory="100"
+        android:icon="@drawable/information_outline"
+        android:title="@string/action_about"
+        app:showAsAction="ifRoom|withText" />
+
+    <item
+        android:id="@+id/action_record"
+        android:orderInCategory="100"
+        android:icon="@drawable/radiobox_marked"
+        android:title="@string/action_record_data"
+        app:showAsAction="ifRoom|withText" />
+
+    <item
+        android:id="@+id/action_history"
+        android:orderInCategory="100"
+        android:icon="@drawable/history"
         android:title="@string/action_history"
-        app:showAsAction="never" />
+        app:showAsAction="ifRoom|withText" />
+
 </menu>

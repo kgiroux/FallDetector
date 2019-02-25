@@ -12,7 +12,7 @@ public class ShortCutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent.ShortcutIconResource icon = Intent.ShortcutIconResource.fromContext(this, R.drawable.ic_launcher_foreground);
+        Intent.ShortcutIconResource icon = Intent.ShortcutIconResource.fromContext(this, R.drawable.fall);
         Intent intent = new Intent();
         Intent launchIntent = new Intent(this, WelcomeActivity.class);
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launchIntent);

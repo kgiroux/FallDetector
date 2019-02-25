@@ -113,6 +113,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onCreate(savedInstanceState);
         setupActionBar();
         checkPermission();
+        this.setTitle("Settings");
     }
 
 

@@ -9,181 +9,66 @@
     tools:context=".activity.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <ScrollView
-        android:id="@+id/scrollView2"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/cardView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="8dp">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="73dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/purpose_n_this_application_made_in_order_to_detect_if_someone_falls_into_the_ground"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/holo_orange_light"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/cardView"
-                app:layout_constraintTop_toTopOf="@+id/cardView2"
-                app:layout_constraintVertical_bias="1.0"
-                tools:layout_editor_absoluteX="8dp">
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="169dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/tutorial_n_click_on_the_setttings_button_in_order_to_put_the_phone_number_that_you_want_to_be_informed_in_case_you_fall_you_can_activate_gps_location_also_from_there_n_click_the_send_text_button_to_send_an_sms_to_the_number_that_you_saved_n_click_on_stop_sound_to_stop_the_alarm_sound_n_click_on_record_data_in_order_to_save_accelerometer_and_gyro_values_to_txt_files"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/holo_orange_light"
-                    android:visibility="visible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.479"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/cardView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/stopbutton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.691">
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="121dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@color/colorPrimary"
-                    android:text="@string/about_permissions_n_this_application_need_permissions_for_using_accelometer_and_gyro_values_these_values_are_processed_within_the_smartphone_locally_additionally_is_using_gps_coordinates_in_order_to_inform_the_person_throught_sms_this_application_is_not_connected_with_the_internet"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/holo_orange_light"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.465"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2"
-                    app:layout_constraintVertical_bias="0.058" />
-
-            </android.support.v7.widget.CardView>
-        </LinearLayout>
-
-    </ScrollView>
-
-    <LinearLayout
-        android:baselineAligned="false"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:weightSum="2"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1">
 
             <Button
-                android:id="@+id/recordbutton"
+                android:id="@+id/stop"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:bottomRightRadius="10dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="30dp"
+                android:background="@color/design_default_color_primary"
                 android:bottomLeftRadius="10dp"
+                android:bottomRightRadius="10dp"
+                android:text="@string/stop_button"
+                android:textColor="@android:color/holo_red_light"
                 android:topLeftRadius="10dp"
                 android:topRightRadius="10dp"
-                android:background="@color/design_default_color_primary"
-                android:text="@string/record_data"
-                android:textColor="@android:color/holo_red_light"
                 tools:layout_editor_absoluteX="8dp"
                 tools:layout_editor_absoluteY="587dp" />
         </LinearLayout>
 
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1">
 
             <Button
-                android:id="@+id/stop"
+                android:id="@+id/send_text"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:bottomRightRadius="10dp"
-                android:bottomLeftRadius="10dp"
-                android:topLeftRadius="10dp"
-                android:topRightRadius="10dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="30dp"
                 android:background="@color/design_default_color_primary"
+                android:bottomLeftRadius="10dp"
+                android:bottomRightRadius="10dp"
                 android:text="@string/send_text"
                 android:textColor="@android:color/holo_red_light"
+                android:topLeftRadius="10dp"
+                android:topRightRadius="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:layout_editor_absoluteY="587dp" />
         </LinearLayout>
-
-
-
 
 
     </LinearLayout>

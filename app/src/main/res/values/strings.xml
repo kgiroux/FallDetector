@@ -21,4 +21,6 @@
     <string name="record_data">Record data</string>
     <string name="action_history">History</string>
     <string name="title_activity_history">HistoryActivity</string>
+    <string name="action_about">About</string>
+    <string name="action_record_data">Record Data</string>
 </resources>
